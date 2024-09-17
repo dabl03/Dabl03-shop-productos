@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<title>Productos disponibles</title>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<link rel="icon" type="image/x-icon" href="/media/favicon.png">
+	<!--Bootstrap 5-->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+	
+	<link rel="stylesheet" type="text/css" href="/static/header.css"/>
+	<style>
+		body{
+			background-color:#ffeaea;
+		}
+		main{
+			border-top-left-radius: 10px;
+			border-top-right-radius: 10px;
+			margin: 4%;
+			background-color:white;
+			padding: 1em;
+  			overflow-y: hidden;
+		}
+		h1{
+			text-align:center;
+		}
+		.item-products{
+			min-width: 100px;
+			min-height: 100px;
+			display: inline-flex;
+			margin-left:2em;
+			margin-bottom:1em;
+			padding:2%;
+			/*width:200px;*/
+		}
+		@media screen and (max-width: 431px) and (min-width: 380px){
+			.item-products{
+				width: 150px;
+				margin-left:1em;
+				padding:1em;
+			}
+		}
+		@media screen and (max-width: 379px) and (min-width: 364px){
+			.item-products{
+				width: 150px;
+				margin-left:0.5em;
+				padding:1em;
+			}
+		}
+		@media screen and (max-width: 363px) {
+			.item-products{
+				display: block;
+				text-align: center;
+			}
+		}
+	</style>
+</head>
+<body onload="init();">
+	<header class="container-flex">
+		<h1 class="justify-content-center">
+			<a href="http://localhost/" style="text-decoration: none; color: inherit;">DABL. CA</a>
+		</h1>
+		<nav class="nav navbar-dark justify-content-center position-relative">
+			<ul class="nav nav-tabs" role="tablist">
+				<!--No aparecera en pantallas mayores a width:575> o d-sm-none-->
+				<li id="menu-no-sm" class="nav-item position-absolute start-0 d-block d-sm-none">
+					<a class="nav-link link-light" href="#solo-texto" data-bs-toggle="collapse" data-bs-target="#boton-menu-sx" aria-expanded="false" aria-controls="boton-menu-sx">
+						Menu
+					</a>
+					<div style="min-height: 120px;">
+						<div class="collapse collapse-horizontal" id="boton-menu-sx">
+							<div id="container-options" class="card card-body" style="width: 300px;background-color:#182028;">
+								<!--Todo: Mejorar la presentacion(estoy pensando en usar navar)-->
+								<a class="btn btn-outline-secondary" href="#solo-texto">Solo texto</a>
+								<a class="btn btn-outline-secondary" href="#solo-imagene">Con imgenes</a>
+								<a class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Herramientas</a>
+								<ul class="type-container dropdown-menu">
+									<!--TOdo: Agregarle un no click que vea si no se hizo click en el elemento y como consecuencia desactivar este menu, o simplemente transformarlo en un dropdown-->
+									<!--/*Generado con js.*/-->
+								</ul>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li class="nav-item d-block d-sm-none" role="presentation">
+					<!--Necesario para que todo sea visible todo-->
+					<a href="http://localhost/"><img style="padding: 0.7em;" src="./media/favicon.png"></a>
+				</li>
+				<li class="nav-item d-none d-sm-block" role="presentation">
+					<a class="nav-link link-light" href="#solo-texto">Solo texto</a>
+				</li>
+				<li class="nav-item d-none d-sm-block" role="presentation">
+					<a class="nav-link link-light" href="#solo-imagene">Con imgenes</a>
+				</li>
+				<li class="nav-item dropdown d-none d-sm-block" role="presentation">
+					<a class="nav-link link-light dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Herramientas</a>
+					<ul class="type-container dropdown-menu">
+						<!--/*Generado con js.*/-->
+					</ul>
+				</li>
+				<li id="user-container" class="nav-item position-absolute end-0 d-block">
+					<a href="#user" class="nav-link link-light">User</a>
+				</li>
+			</ul>
+		</nav>
+	</header>
+	<!--body-->
+	<main class="container">
+		<h1 class="justify-content-center">Productos disponibles:</h1>
+		<div id="init-loads" class="d-flex justify-content-center">
+		  <div class="spinner-border" role="status">
+		    <span class="sr-only">😊</span>
+		  </div>
+		</div>
+		<!--Todo: Incluir una barra de busqueda.-->
+		<!--Usar popple para hacer un menu desplegable-->
+		<div id="c-productos" class="container"></div>
+	</main>
+	<script>
+		const WIDTH_SCREEN=screen.availWidth;
+		var actual=null;
+		var types=[];
+		var el_after=null;
+		function init(){
+			console.log("Obteniendo productos...");
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					console.log("Productos obtenidos...\nColocando Productos...")
+					var data = JSON.parse(this.responseText);
+					//Terminamos con la animacion de espera:
+					let loads_anims=document.getElementById("init-loads");
+					loads_anims.classList.add("d-none");
+
+					append_products(data);
+				}
+			};
+			xhttp.open("GET", "./productos.json", true);
+			xhttp.send();
+		}
+		function append_products(datas){
+			let c_products=document.getElementById("c-productos");
+			let ul=document.getElementsByClassName("type-container");
+			let ul_1=ul[0];
+			let ul_2=ul[1];
+			/*Todo, estar pendiente de si cambia el tamaño de la pagina para que funcione ambos o simplemente usar mas memoria.*/
+			//Para no gastar tanta memoria, dependiendo de que menu este oculto agregaremos los productos.
+			ul=(window.getComputedStyle(document.getElementById("menu-no-sm"))["display"]!='none')?ul[0]:ul[1];
+
+			//Vaciamos el ul.
+			ul.innerHTML="<li onclick=\"reset_all()\" class=\"btn btn-outline-secondary container\">All</li>";
+			//arrange-vertically or arrange-horizontaly
+			for(let data of datas){
+				let p_now=document.createElement("div");
+				p_now.classList.add("border","item-products",data[7].replace(/\s/g,'-'));
+				p_now.setAttribute("data",data[1]);
+				p_now.innerHTML=`<dl>
+					<dt>${data[1]}</dt>
+					<dd>
+						Valor: <b>${data[6]}<i>Bs.ss</i></b>
+					</dd>
+				</dl>`;
+				c_products.appendChild(p_now);
+
+				if (!types.includes(data[7])){
+					let li_now=document.createElement("li");
+					li_now.classList.add("btn","btn-outline-secondary","container");
+					li_now.innerHTML=data[7];
+					li_now.addEventListener("click",()=>{
+						filter_all(li_now);
+					});
+
+					ul.appendChild(li_now);
+					types.push(data[7]);
+				}
+			}
+			let ul_io=ul;
+			let ul_out=ul==ul_1?ul_2:ul_1;
+			ul_out.innerHTML=ul_io.innerHTML;
+		}
+		function filter_all(this_element){
+			//Hacemos que se mantenga activo el elemento pulsado
+			if (el_after){
+				el_after.classList.remove("active");
+			}
+			this_element.classList.add("active");
+			el_after=this_element;
+			//Filtramos los elementos.
+			let type=this_element.innerHTML;
+			//Eliminamos todos los estilos anteriores.
+			if(document.getElementById("style-"+type))
+				delete_style();
+			//Actualizamos la lista.
+			create_style(type);
+		}
+		function create_style(r){
+			for (let t of types){
+				let this_style=document.createElement("style");
+				//Si es el elemento que buscamos:
+				this_style.innerHTML='.'+t+((r!=t)?"{display:none;}":"{display:inline-flex;}");
+				this_style.setAttribute("id","style-"+t);
+				document.head.appendChild(this_style);
+			}
+		}
+		function delete_style(){
+			for (let t of types){
+				let this_style=document.getElementById("style-"+t);
+				this_style.parentNode.removeChild(this_style);
+			}
+		}
+		function reset_all(){
+			//El anterior boton no se vea activo.
+			if (el_after)
+				el_after.classList.remove("active");
+			//Si existen eliminamos antes de actualizar.
+			if (document.getElementById("style-"+types[0]))
+				delete_style();
+			for (let t of types){
+				let this_style=document.createElement("style");
+				this_style.innerHTML='.'+t+"{display:inline-flex;}";
+				this_style.setAttribute("id","style-"+t);
+				document.head.appendChild(this_style);
+			}
+		}
+	</script>
+	<!--Despues del body-->
+	<!--footer-->
+</body>
+</html>
