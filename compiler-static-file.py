@@ -4,7 +4,7 @@ import server;
 from distutils.dir_util import copy_tree;
 
 ROOT_DIR=os.path.dirname(os.path.abspath(__file__));
-OUTDIR=ROOT_DIR+"/static-out";
+OUTDIR=ROOT_DIR+"/docs";
 IGNORE=("static","media");# Solo se copian y pegan.
 
 def create_file(url:str,reponse):
