@@ -3,7 +3,7 @@
 {% block head %}{{ super() }}
 	<style>
 		body{
-			background-color:#ffeaea;
+			background-color:#cfecc7;
 		}
 		main{
 			border-top-left-radius: 10px;
@@ -24,6 +24,9 @@
 			margin-bottom:1em;
 			padding:2%;
 			/*width:200px;*/
+		}
+		* [data-visible=False]{
+			display:none;
 		}
 		@media screen and (max-width: 431px) and (min-width: 380px){
 			.item-products{
@@ -46,91 +49,102 @@
 			}
 		}
 	</style>{% endblock %}{#
-#}	{% block bodyAttribute %}onload="init();"{% endblock %}
+#}	{% block bodyAttribute %}onload="get_products();"{% endblock %}
 {% block header %}{{ super() }}{% endblock %}{#
 #}{% block content %}
-	<main class="container">
+	<main class="container" style="z-index:0 !important;">
 		<h1 class="justify-content-center">Productos disponibles:</h1>
+		<div class="container"><a href="JavaScript:reset_all()">#Mostrar toda las categorías</a></div>
 		<div id="init-loads" class="d-flex justify-content-center">
 		  <div class="spinner-border" role="status">
 		    <span class="sr-only">😊</span>
 		  </div>
 		</div>
-		<!--Todo: Incluir una barra de busqueda.-->
-		<!--Usar popple para hacer un menu desplegable-->
-		<div id="c-productos" class="container"></div>
+		<div id="c-productos" class="container"><!--Generado por JavaScript--></div>
 	</main>
 	<script>
 		const WIDTH_SCREEN=screen.availWidth;
 		var actual=null;
 		var types=[];
 		var el_after=null;
-		function init(){
+		async function get_products(){
 			console.log("Obteniendo productos...");
-			var xhttp = new XMLHttpRequest();
-			xhttp.onreadystatechange = function() {
-				if (this.readyState == 4 && this.status == 200) {
-					console.log("Productos obtenidos...\nColocando Productos...")
-					var data = JSON.parse(this.responseText);
-					//Terminamos con la animacion de espera:
-					let loads_anims=document.getElementById("init-loads");
-					loads_anims.classList.add("d-none");
+			const url="./productos.json";
+			const reponse=await fetch(url);
+			if (reponse.ok){
+				console.log("Productos obtenidos...\nColocando Productos...");
+				const data = await reponse.json();
 
-					append_products(data);
-				}
-			};
-			xhttp.open("GET", "./productos.json", true);
-			xhttp.send();
+				//Terminamos con la animacion de espera:
+				let loads_anims=document.getElementById("init-loads");
+				loads_anims.classList.add("d-none");
+				append_products(data);
+			}else{
+				console.error(`No se ha podido cargar el recurso "${url}"-`);
+			}
 		}
 		function append_products(datas){
-			let c_products=document.getElementById("c-productos");
-			let ul=document.getElementsByClassName("type-container");
-			let ul_1=ul[0];
-			let ul_2=ul[1];
-			/*Todo, estar pendiente de si cambia el tamaño de la pagina para que funcione ambos o simplemente usar mas memoria.*/
-			//Para no gastar tanta memoria, dependiendo de que menu este oculto agregaremos los productos.
-			ul=(window.getComputedStyle(document.getElementById("menu-no-sm"))["display"]!='none')?ul[0]:ul[1];
+			const c_products=document.getElementById("c-productos");
+			const menu=document.getElementsByClassName("type-container");
+			const ver_menu=menu[0];//Vertical menu
+			const h_menu=menu[1];// Horizontal menu.
 
 			//Vaciamos el ul.
-			ul.innerHTML="<li onclick=\"reset_all()\" class=\"btn btn-outline-secondary container\">All</li>";
+			h_menu.innerHTML="<li onclick=\"reset_all()\" class=\"dropdown-item\"><button class=\"btn\">Toda las categorías</button></li>";
 			//arrange-vertically or arrange-horizontaly
 			for(let data of datas){
 				let p_now=document.createElement("div");
-				p_now.classList.add("border","item-products",data[7].replace(/\s/g,'-'));
+				const type_now=data[7].replace(/\s/g,'-');
+				const id=data[1].replace(/\s/g,'-');
+				p_now.classList.add("card","item-products",type_now);
 				p_now.setAttribute("data",data[1]);
-				p_now.innerHTML=`<dl>
-					<dt>${data[1]}</dt>
-					<dd>
-						Valor: <b>${data[6]}<i>Bs.ss</i></b>
-					</dd>
-				</dl>`;
+				p_now.innerHTML=`
+				<img src="${data[3]}" alt="${data[2]}" class="card-img-top" width="90px" height="130px"/>
+				<div class="card-body">
+					<h5 class="card-title">${data[1]}</h5>
+					<p class="card-text">
+						<b>Valor</b>: ${data[6]} Bs.ss</br>
+						<b>Categoria</b>: 
+						<a href="JavaScript:void(0)" onclick="filter_all(this.innerHTML.replace('#',''))" class="card-link">#${data[7]}</a></br>
+						<div onclick="view_des('des-${id}',this);" style="cursor:pointer;">
+							Descripción: <b class="expansion-icon"> </b>
+							<hr/>
+							<span id="des-${id}" class="d-none">${data[2]}</span>
+						</div>
+					</p>
+				</div>`;
 				c_products.appendChild(p_now);
 
-				if (!types.includes(data[7])){
+				if (!types.includes(type_now)){
 					let li_now=document.createElement("li");
-					li_now.classList.add("btn","btn-outline-secondary","container");
-					li_now.innerHTML=data[7];
+					li_now.setAttribute("class","dropdown-item");
+					let button=document.createElement("button");
+					button.setAttribute("type","button");
+					button.setAttribute("class","btn");
+					button.innerHTML=data[7];
 					li_now.addEventListener("click",()=>{
-						filter_all(li_now);
+						filter_btn_click(button);
 					});
 
-					ul.appendChild(li_now);
-					types.push(data[7]);
+					li_now.appendChild(button);
+					h_menu.appendChild(li_now);
+					types.push(type_now);
 				}
 			}
-			let ul_io=ul;
-			let ul_out=ul==ul_1?ul_2:ul_1;
-			ul_out.innerHTML=ul_io.innerHTML;
+			ver_menu.innerHTML=h_menu.innerHTML;
 		}
-		function filter_all(this_element){
+		
+		function filter_btn_click(this_element){
 			//Hacemos que se mantenga activo el elemento pulsado
 			if (el_after){
 				el_after.classList.remove("active");
 			}
 			this_element.classList.add("active");
 			el_after=this_element;
-			//Filtramos los elementos.
-			let type=this_element.innerHTML;
+			filter_all(this_element.innerHTML);
+		}
+		function filter_all(type){
+			type=type.replace(/\s/g,'-');
 			//Eliminamos todos los estilos anteriores.
 			if(document.getElementById("style-"+type))
 				delete_style();
@@ -165,6 +179,14 @@
 				this_style.setAttribute("id","style-"+t);
 				document.head.appendChild(this_style);
 			}
+		}
+		/**Muestra la descripción del producto deseado.*/
+		function view_des(id_description,button_element){
+			const des=document.getElementById(id_description);
+			des.classList.toggle("d-none");
+			
+			const icon=button_element.childNodes[1];
+			icon.classList.toggle("collapse-icon");
 		}
 	</script>{#
 #}{% endblock %}

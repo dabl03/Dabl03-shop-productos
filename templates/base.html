@@ -8,17 +8,18 @@
 	<!--Bootstrap 5-->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-	{% block head %}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/13.1.1/math.js" type="text/JavaScript"><!--For mathematical calculations--></script>
+{% block head %}
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='header.css') }}"/>{#
 	#}{% endblock %}
 </head>
 <body {% block bodyAttribute %}{% endblock %}>{#
 #}{% block header %}
-	<header class="container-flex">
+	<header class="container-flex" style="z-index: 1;">
 		<h1 class="justify-content-center">
 			<a href="{{ request.base_url }}" style="text-decoration: none; color: inherit;">DABL. CA</a>
 		</h1>
-		<nav class="nav navbar-dark justify-content-center position-relative">
+		<nav class="nav navbar-dark justify-content-center position-relative" style="z-index: 3;">
 			<ul class="nav nav-tabs" role="tablist">
 				<!--No aparecera en pantallas mayores a width:575> o d-sm-none-->
 				<li id="menu-no-sm" class="nav-item position-absolute start-0 d-block d-sm-none">
@@ -28,12 +29,10 @@
 					<div style="min-height: 120px;">
 						<div class="collapse collapse-horizontal" id="boton-menu-sx">
 							<div id="container-options" class="card card-body" style="width: 300px;background-color:#182028;">
-								<!--Todo: Mejorar la presentacion(estoy pensando en usar navar)-->
 								<a class="btn btn-outline-secondary" href="#solo-texto">Solo texto</a>
 								<a class="btn btn-outline-secondary" href="#solo-imagene">Con imgenes</a>
-								<a class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Herramientas</a>
+								<a class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Categorías</a>
 								<ul class="type-container dropdown-menu">
-									<!--TOdo: Agregarle un no click que vea si no se hizo click en el elemento y como consecuencia desactivar este menu, o simplemente transformarlo en un dropdown-->
 									<!--/*Generado con js.*/-->
 								</ul>
 							</div>
@@ -51,12 +50,12 @@
 					<a class="nav-link link-light" href="#solo-imagene">Con imgenes</a>
 				</li>
 				<li class="nav-item dropdown d-none d-sm-block" role="presentation">
-					<a class="nav-link link-light dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Herramientas</a>
+					<a class="nav-link link-light dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Categorías</a>
 					<ul class="type-container dropdown-menu">
 						<!--/*Generado con js.*/-->
 					</ul>
 				</li>
-				<li id="user-container" class="nav-item position-absolute end-0 d-block">
+				<li id="user-container" class="nav-item position-absolute end-0 d-block" style="display:none !important">
 					<a href="#user" class="nav-link link-light">User</a>
 				</li>
 			</ul>

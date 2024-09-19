@@ -10,5 +10,18 @@ header nav{
 	background-color: #212529;
 	color:white;
 	border-bottom: 2px solid gray;
-	scroll-behavior: 
+	scroll-behavior: 1;
+}
+body{
+	background-color: #eaeee3;
+}
+.expansion-icon{
+	display:inline-block;
+	clip-path: path("m2, 5 l5,5 l5, -5");
+	background-color:black;
+	width: 1em;
+	height:1em;
+}
+.collapse-icon{
+	clip-path: path("m2, 10 l5,-5 l5, 5");
 }

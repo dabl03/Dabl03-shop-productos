@@ -5,7 +5,7 @@ from json import dumps as json_dumps;
 import query;
 
 #Constant:
-DEBUG=True;
+DEBUG=False;
 app = Flask(__name__);
 root_program="./";
 production=None;
