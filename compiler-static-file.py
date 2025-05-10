@@ -6,7 +6,7 @@ from distutils.dir_util import copy_tree;
 ROOT_DIR=os.path.dirname(os.path.abspath(__file__));
 OUTDIR=ROOT_DIR+"/docs";
 IGNORE=("static","media");# Solo se copian y pegan.
-
+server.rootPath="../";
 def create_file(url:str,reponse):
   out_url=f"{OUTDIR}/{url if url!='/' else './index.html'}";
   print(f"Creando archivo {out_url}...");
@@ -25,8 +25,7 @@ def compiler_url(app):
         url=str(rule);
         create_file(url,client.get(str(rule)));
   print("Copiando los directorios estaticos...");
-  copy_tree(f"{ROOT_DIR}/media",f"{OUTDIR}/media");
-  copy_tree(f"{ROOT_DIR}/static",f"{OUTDIR}/static");
+  # copy_tree(f"{ROOT_DIR}/static",f"{OUTDIR}/static");
 if __name__=="__main__":
   server.app.config["TEMPLATES_AUTO_RELOAD"]=False;
   server.app.config["DEBUG"]=False;

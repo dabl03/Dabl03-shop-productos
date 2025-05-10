@@ -8,8 +8,8 @@ import query;
 DEBUG=False;
 app = Flask(__name__);
 root_program="./";
+rootPath="/";# El archivo compiler-static-file.py lo modifica para no tener problema en github Page
 production=None;
-
 app.config["TEMPLATES_AUTO_RELOAD"]=True if DEBUG else None;
 app.config["DEBUG"]=DEBUG;
 
@@ -18,14 +18,19 @@ media_pt=Blueprint("media", __name__, static_folder=root_program+"/media", stati
 app.register_blueprint(media_pt);
 
 def get_static_file(url):
-  with open(root_program+url,'r') as html:
-    return html.read();
-  return "Error: Page no exists";
+  """Lee un archivo de texto y retorna su contenido.""";
+  with open(root_program+url,'r') as file:
+    return file.read();
+  return "Error: File not Found";
+
 @app.route("/")
 def product():
-  return render_template("index.html",
+  return render_template(
+    "index.html",
     title="Productos disponible",
-    name_logo="Dabl03");
+    name_logo="Dabl03",
+    rootPath=rootPath
+  );
 
 @app.route("/productos.json",methods=['GET'])
 def get_products():
@@ -42,5 +47,4 @@ def not_found(error):
 if __name__ == '__main__':
   if DEBUG: production="localhost";
   else: production='0.0.0.0';
-  #https://es.stackoverflow.com/questions/436393/no-entiendo-bien-flask-host-y-puerto
   app.run(host=production, port=5000);
