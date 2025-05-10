@@ -125,7 +125,7 @@
 		var el_after=null;
 		async function get_products(){
 			console.log("Obteniendo productos...");
-			const url="/productos.json";
+			const url="/Dabl03-shop-productos/productos.json";
 			const reponse=await fetch(url);
 			if (reponse.ok){
 				console.log("Productos obtenidos...\nColocando Productos...");
@@ -155,9 +155,8 @@
 
 				p_now.classList.add("card","item-products",type_now);
 				p_now.setAttribute("data",data[1]);
-				// img_path=(("/Dabl03-shop-productos/"=="../")?"..":'')+data[3];// So as not to break it on github page.
 				p_now.innerHTML=`
-				<img src="/Dabl03-shop-productos/${data[3]}" alt="${data[2]}" class="card-img-top" width="90px" height="130px"/>
+				<img src="/Dabl03-shop-productos//${data[3]}" alt="${data[2]}" class="card-img-top" width="90px" height="130px"/>
 				<div class="card-body">
 					<h5 class="card-title">${data[1]}</h5>
 					<p class="card-text">
