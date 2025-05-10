@@ -6,7 +6,7 @@ from distutils.dir_util import copy_tree;
 ROOT_DIR=os.path.dirname(os.path.abspath(__file__));
 OUTDIR=ROOT_DIR+"/docs";
 IGNORE=("static","media");# Solo se copian y pegan.
-server.rootPath="../";
+server.rootPath="/Dabl03-shop-productos/";# Nombre del repositorio para evitar problemas.
 def create_file(url:str,reponse):
   out_url=f"{OUTDIR}/{url if url!='/' else './index.html'}";
   print(f"Creando archivo {out_url}...");
