@@ -14,7 +14,7 @@ app.config["TEMPLATES_AUTO_RELOAD"]=True if DEBUG else None;
 app.config["DEBUG"]=DEBUG;
 
 #Registramos una nueva url
-media_pt=Blueprint("media", __name__, static_folder=root_program+"/media", static_url_path="/media");
+media_pt=Blueprint("media", __name__, static_folder=root_program+"docs/media", static_url_path="/media");
 app.register_blueprint(media_pt);
 
 def get_static_file(url):

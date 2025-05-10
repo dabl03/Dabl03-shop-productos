@@ -25,7 +25,7 @@ def compiler_url(app):
         url=str(rule);
         create_file(url,client.get(str(rule)));
   print("Copiando los directorios estaticos...");
-  # copy_tree(f"{ROOT_DIR}/static",f"{OUTDIR}/static");
+  copy_tree(f"{ROOT_DIR}/static",f"{OUTDIR}/static");
 if __name__=="__main__":
   server.app.config["TEMPLATES_AUTO_RELOAD"]=False;
   server.app.config["DEBUG"]=False;
