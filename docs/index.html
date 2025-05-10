@@ -4,13 +4,13 @@
 	<title>Productos disponibles</title>
 	<meta charset="utf-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	<link rel="icon" type="image/x-icon" href="../media/favicon.png">
+	<link rel="icon" type="image/x-icon" href="/Dabl03-shop-productos/media/favicon.png">
 	<!--Bootstrap 5-->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/13.1.1/math.js" type="text/JavaScript"><!--For mathematical calculations--></script>
 
-	<link rel="stylesheet" type="text/css" href="../static/header.css"/>
+	<link rel="stylesheet" type="text/css" href="/Dabl03-shop-productos/static/header.css"/>
 	<style>
 		body{
 			background-color:#cfecc7;
@@ -87,7 +87,7 @@
 				</li>
 				<li class="nav-item d-block d-sm-none" role="presentation">
 					<!--Necesario para que todo sea visible todo-->
-					<a href="/"><img style="padding: 0.7em;" src="../media/favicon.png"></a>
+					<a href="/"><img style="padding: 0.7em;" src="/Dabl03-shop-productos/media/favicon.png"></a>
 				</li>
 				<li class="nav-item d-none d-sm-block" role="presentation">
 					<a class="nav-link link-light" href="#solo-texto">Solo texto</a>
@@ -155,9 +155,9 @@
 
 				p_now.classList.add("card","item-products",type_now);
 				p_now.setAttribute("data",data[1]);
-				// img_path=(("../"=="../")?"..":'')+data[3];// So as not to break it on github page.
+				// img_path=(("/Dabl03-shop-productos/"=="../")?"..":'')+data[3];// So as not to break it on github page.
 				p_now.innerHTML=`
-				<img src="../${data[3]}" alt="${data[2]}" class="card-img-top" width="90px" height="130px"/>
+				<img src="/Dabl03-shop-productos/${data[3]}" alt="${data[2]}" class="card-img-top" width="90px" height="130px"/>
 				<div class="card-body">
 					<h5 class="card-title">${data[1]}</h5>
 					<p class="card-text">
