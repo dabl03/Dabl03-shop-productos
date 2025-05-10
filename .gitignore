@@ -1,7 +1,4 @@
-/false/*
-/false/
-/__pycache__/*
-/__pycache__/
+false/**
+__pycache__/**
 *.log
-/virtual_venv/
-/vitual_venv/*
+vitual_venv/**

@@ -155,8 +155,9 @@
 
 				p_now.classList.add("card","item-products",type_now);
 				p_now.setAttribute("data",data[1]);
+				data[3]=(data[3][0]=='/')?data[3].substring(1):data[3];
 				p_now.innerHTML=`
-				<img src="/Dabl03-shop-productos//${data[3]}" alt="${data[2]}" class="card-img-top" width="90px" height="130px"/>
+				<img src="/Dabl03-shop-productos/${data[3]}" alt="${data[2]}" class="card-img-top" width="90px" height="130px"/>
 				<div class="card-body">
 					<h5 class="card-title">${data[1]}</h5>
 					<p class="card-text">
